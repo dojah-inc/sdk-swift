@@ -1,12 +1,12 @@
 //
 //  DJBaseViewController.swift
-//  
+//
 //
 //  Created by Isaac Iniongun on 27/10/2023.
 //
 
-import UIKit
 import CoreLocation
+import UIKit
 
 public class DJBaseViewController: UIViewController {
     let navView = DJNavBarView()
@@ -32,28 +32,24 @@ public class DJBaseViewController: UIViewController {
         setupPoweredView()
         addTapGestures()
     }
-    
-    
-    public override func viewWillDisappear(_ animated: Bool)
-    {
+
+    public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.resignFirstResponder()
-//        if preference.DJAuthStep.name != .email {
-//            kviewModel?.setNextAuthStep(step: -1)
-//        }
-        print("current page is \(String(describing: preference.DJAuthStep.name))")
+        //        if preference.DJAuthStep.name != .email {
+        //            kviewModel?.setNextAuthStep(step: -1)
+        //        }
+        print(
+            "current page is \(String(describing: preference.DJAuthStep.name))"
+        )
         //Is popped to the preview screen in the stack
-        if self.isMovingFromParent == true
-        {
+        if self.isMovingFromParent == true {
             print("View controller was popped:DJBaseViewController")
-        }
-        else
-        {
+        } else {
             print("New view controller was pushed:DJBaseViewController")
         }
     }
 
-    
     private func setupNavView() {
         with(navView) {
             addSubview($0)
@@ -66,7 +62,7 @@ public class DJBaseViewController: UIViewController {
             )
         }
     }
-    
+
     private func setupPoweredView() {
         with(poweredView) {
             addSubview($0)
@@ -77,44 +73,45 @@ public class DJBaseViewController: UIViewController {
             )
         }
     }
-    
+
     func addTapGestures() {}
-    
+
     func bindViewModel() {
         kviewModel?.showLoader = { [weak self] show in
             runOnMainThread {
                 self?.showLoader(show)
             }
         }
-        
+
         kviewModel?.showMessage = { [weak self] config in
             self?.showMessage(config: config)
         }
-        
+
         kviewModel?.showNextPage = { [weak self] in
             runOnMainThread {
                 self?.showNextPage()
             }
         }
-        
+
         kviewModel?.errorDoneAction = { [weak self] in
             runOnMainThread {
                 self?.kpop()
             }
         }
-        
+
         kviewModel?.showGovtIDPage = { [weak self] govtID in
             runOnMainThread {
                 self?.showGovernmentIDViewController(govtID)
             }
         }
-        
+
         kviewModel?.verificationDoneAction = { [weak self] in
             runOnMainThread {
                 self?.kpopToRoot()
             }
-        }    }
-    
+        }
+    }
+
     func showLoader(_ show: Bool) {
         if show {
             kpresent(vc: loaderViewController)
@@ -122,13 +119,13 @@ public class DJBaseViewController: UIViewController {
             loaderViewController.kdismiss()
         }
     }
-    
+
     func showMessage(config: FeedbackConfig) {
         runOnMainThread { [weak self] in
             self?.showFeedbackController(config: config)
         }
     }
-    
+
     func showNextPage() {
         guard let kviewModel else { return }
         let pageName = kviewModel.preference.DJAuthStep.name
@@ -155,8 +152,13 @@ public class DJBaseViewController: UIViewController {
             let controller = GovernmentDataViewController()
             kpush(controller)
         case .governmentDataVerification:
-            guard let verificationMode = kviewModel.preference.DJSelectedGovernmentIDVerificationMethod?.verificationModeParam else { return }
-            if verificationMode == "OTP" {
+            guard
+                let verificationMode = kviewModel.preference
+                    .DJSelectedGovernmentIDVerificationMethod?
+                    .verificationModeParam
+            else { return }
+        
+            if verificationMode == "OTP" || verificationMode == "Whatsapp" {
                 showOtpVerification()
             } else {
                 didChooseLiveness()
@@ -168,7 +170,10 @@ public class DJBaseViewController: UIViewController {
             if preference.DJAuthStep.config?.version == 3 {
                 didChooseLiveness()
             } else {
-                didChooseLiveness(verificationMethod: .selfieVideo, viewState: .record)
+                didChooseLiveness(
+                    verificationMethod: .selfieVideo,
+                    viewState: .record
+                )
             }
         case .id, .businessID, .additionalDocument:
             let controller = GovtIDCaptureViewController()
@@ -185,12 +190,12 @@ public class DJBaseViewController: UIViewController {
             break
         }
     }
-    
+
     func showOtpVerification() {
         let controller = VerifyOTPViewController()
         kpush(controller)
     }
-    
+
     private func didChooseLiveness(
         verificationMethod: GovtIDVerificationMethod = .selfie,
         viewState: SelfieVideoKYCViewState = .capture
@@ -201,8 +206,10 @@ public class DJBaseViewController: UIViewController {
                 viewState: viewState
             )
         } else {
-            let controller = PermissionViewController(permissionType: .camera) { [weak self] in
-                self?.attachmentManager.requestCameraPermission(success:  { [weak self] in
+            let controller = PermissionViewController(permissionType: .camera) {
+                [weak self] in
+                self?.attachmentManager.requestCameraPermission(success: {
+                    [weak self] in
                     self?.showSelfieVideoController(
                         verificationMethod: verificationMethod,
                         viewState: viewState
@@ -213,7 +220,7 @@ public class DJBaseViewController: UIViewController {
             kpresent(vc: controller)
         }
     }
-    
+
     private func showSelfieVideoController(
         verificationMethod: GovtIDVerificationMethod = .selfie,
         viewState: SelfieVideoKYCViewState = .capture
@@ -225,55 +232,66 @@ public class DJBaseViewController: UIViewController {
         let controller = SelfieVideoKYCViewController(viewModel: viewModel)
         kpush(controller)
     }
-    
+
     private func didChooseAddressVerification() {
         locationManager.didChangeAuthorization = { [weak self] status in
             self?.didChangeLocationAuthorization(status)
         }
-        
-        let isManualLocationSet = preference.DJExtraUserData?.location?.isParamSet() == true
+
+        let isManualLocationSet =
+            preference.DJExtraUserData?.location?.isParamSet() == true
         if locationManager.hasLocationPermission || isManualLocationSet {
             showAddressVerificationController()
         } else {
-            let controller = PermissionViewController(permissionType: .location) { [weak self] in
+            let controller = PermissionViewController(permissionType: .location)
+            { [weak self] in
                 self?.locationManager.requestAuthorization()
             }
             controller.modalPresentationStyle = .overCurrentContext
             kpresent(vc: controller)
         }
     }
-    
-    private func didChangeLocationAuthorization(_ status: CLAuthorizationStatus) {
+
+    private func didChangeLocationAuthorization(_ status: CLAuthorizationStatus)
+    {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse, .authorized:
             showAddressVerificationController()
         case .notDetermined, .restricted, .denied:
-            showToast(message: "Location services are required for address verification", type: .error)
+            showToast(
+                message:
+                    "Location services are required for address verification",
+                type: .error
+            )
         @unknown default:
-            showToast(message: "Location services are required for address verification", type: .error)
+            showToast(
+                message:
+                    "Location services are required for address verification",
+                type: .error
+            )
         }
     }
-    
+
     private func showAddressVerificationController() {
         let controller = AddressVerificationViewController()
         kpush(controller)
     }
-    
+
     func didTapNavBackButton() {
         if preference.DJAuthStep.name != .email {
             kviewModel?.setNextAuthStep(step: -1)
         }
         kpop()
     }
-    
+
     func didTapNavCloseButton() {
         self.navigationController?.popToRootViewController(animated: false)
-//        if preference.DJAuthStep.name != .email {
-//            kviewModel?.setNextAuthStep(step: -1)
-//        }
-//        kpop()
+        //        if preference.DJAuthStep.name != .email {
+        //            kviewModel?.setNextAuthStep(step: -1)
+        //        }
+        //        kpop()
     }
-    
+
     private func showGovernmentIDViewController(_ govtID: DJGovernmentID) {
         let viewModel = GovtIDCaptureViewModel(selectedID: govtID)
         let controller = GovtIDCaptureViewController(viewModel: viewModel)
@@ -286,7 +304,7 @@ extension DJBaseViewController: DJNavBarViewDelegate {
     func didTapBack() {
         didTapNavBackButton()
     }
-    
+
     func didDismiss() {
         didTapNavCloseButton()
     }

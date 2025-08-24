@@ -43,10 +43,10 @@ struct GovernmentIDFactory {
             governmentIDs.append(voter)
         }
         
-        if authStep.config?.ghDL == true, let ghDL = govtDataConfig.ghDL {
-            governmentIDs.append(ghDL)
-        }
-        
+//        if authStep.config?.ghDL == true, let ghDL = govtDataConfig.ghDL {
+//            governmentIDs.append(ghDL)
+//        }
+//        
         if authStep.config?.ghVoter == true, let ghVoter = govtDataConfig.ghVoter {
             governmentIDs.append(ghVoter)
         }
@@ -63,9 +63,9 @@ struct GovernmentIDFactory {
             governmentIDs.append(ugTELCO)
         }
         
-        if authStep.config?.keDL == true, let keDL = govtDataConfig.keDL {
-            governmentIDs.append(keDL)
-        }
+//        if authStep.config?.keDL == true, let keDL = govtDataConfig.keDL {
+//            governmentIDs.append(keDL)
+//        }
         
         if authStep.config?.keID == true, let keID = govtDataConfig.keID {
             governmentIDs.append(keID)
@@ -97,6 +97,7 @@ struct GovernmentIDFactory {
         
         var methods = [DJGovernmentID]()
         
+        
         if authStep.config?.selfie == true, let selfieConfig = govtDataConfig.selfie, let selfieVideoConfig = govtDataConfig.selfieVideo {
             if authStep.config?.version == 3 {
                 methods.append(selfieConfig)
@@ -107,6 +108,10 @@ struct GovernmentIDFactory {
         
         if authStep.config?.otp == true, let otpConfig = govtDataConfig.otp {
             methods.append(otpConfig)
+        }
+        
+        if authStep.config?.whatsappOtp == true, let whatsappOtpConfig = govtDataConfig.whatsappOtp {
+            methods.append(whatsappOtpConfig)
         }
         
         return methods

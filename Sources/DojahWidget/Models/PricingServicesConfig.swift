@@ -37,7 +37,7 @@ struct PricingDataConfig: Codable {
     let dl, mobile, ghDL, ghVoter: String?
     let keKra, keID, keDL, aoNin, zaID: String?
     let verification, aml, cac, idDefault: String?
-    let selfie, video, otp, emailOtp: String?
+    let selfie, video, otp,whatsappOtp, emailOtp: String?
 
     enum CodingKeys: String, CodingKey {
         case bvn, bvnAdvance, vnin, nin, dl, mobile
@@ -50,6 +50,7 @@ struct PricingDataConfig: Codable {
         case zaID = "za-id"
         case idDefault = "default"
         case verification, aml, cac
+        case whatsappOtp = "whatsapp"
         case selfie, video, otp, emailOtp
     }
 }

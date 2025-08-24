@@ -23,6 +23,7 @@
         "selfie": "kyc_liveness_selfie",
         "video": "kyc_liveness_video",
         "otp": "sms",
+        "whatsappOtp": "whatsapp",
         "emailOtp": "email_otp"
     },
     "selfie": {

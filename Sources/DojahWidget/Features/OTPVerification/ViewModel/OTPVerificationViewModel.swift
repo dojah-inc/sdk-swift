@@ -23,55 +23,63 @@ final class OTPVerificationViewModel: BaseViewModel {
     private var otpReference = ""
     private var otpRequestChannel: Any {
         switch preference.DJAuthStep.name {
-        case .phoneNumber:
-            return ["sms", "whatsapp", "voice"]
+        case .phoneNumber: return preference.DJVerificationMethod
         case .email:
             return "email"
         default:
             return "sms"
         }
     }
-    
-    init(otpRemoteDatasource: OTPRemoteDatasourceProtocol = OTPRemoteDatasource()) {
+
+    init(
+        otpRemoteDatasource: OTPRemoteDatasourceProtocol = OTPRemoteDatasource()
+    ) {
         self.otpRemoteDatasource = otpRemoteDatasource
         super.init()
     }
-    
+
     func requestOTP() {
         showLoader?(true)
         hideMessage()
+
+        print(otpRequestChannel)
         let params: DJParameters = [
-            preference.DJAuthStep.name == .email ? "email" : "destination": preference.DJOTPVerificationInfo,
-            "length" : 4,
-            "channel" : otpRequestChannel,
+            preference.DJAuthStep.name == .email ? "email" : "destination":
+                preference.DJOTPVerificationInfo,
+            "length": 4,
+            "channel": otpRequestChannel,
             "sender_id": "kedesa",
-            "priority": true
+            "priority": true,
         ]
-        
+
         otpRemoteDatasource.requestOTP(params: params) { [weak self] result in
             self?.showLoader?(false)
             switch result {
             case let .success(entityResponse):
-                if let response = entityResponse.entity, let otpReference = response.first?.referenceID {
+                if let response = entityResponse.entity,
+                    let otpReference = response.first?.referenceID
+                {
                     self?.otpReference = otpReference
                     runAfter(0.15) {
                         self?.viewProtocol?.startCountdownTimer()
                     }
                 } else {
-                    self?.showErrorMessage(DJSDKError.OTPCouldNotBeSent.uiMessage)
+                    self?.showErrorMessage(
+                        DJSDKError.OTPCouldNotBeSent.uiMessage
+                    )
                 }
             case .failure:
                 self?.showErrorMessage(DJSDKError.OTPCouldNotBeSent.uiMessage)
             }
         }
     }
-    
+
     func verifyOTP() {
         showLoader?(true)
         hideMessage()
         let params = [
             "code": otp,
-            "reference_id": otpReference
+            "reference_id": otpReference,
         ]
         otpRemoteDatasource.validateOTP(params: params) { [weak self] result in
             self?.showLoader?(false)
@@ -81,7 +89,9 @@ final class OTPVerificationViewModel: BaseViewModel {
                     self?.didVerifyOTP()
                 } else {
                     self?.sendStepFailedEventForInvalidOTP()
-                    self?.showErrorMessage(DJSDKError.invalidOTPEntered.uiMessage)
+                    self?.showErrorMessage(
+                        DJSDKError.invalidOTPEntered.uiMessage
+                    )
                 }
             case let .failure(error):
                 self?.sendStepFailedEventForInvalidOTP()
@@ -89,7 +99,7 @@ final class OTPVerificationViewModel: BaseViewModel {
             }
         }
     }
-    
+
     private func didVerifyOTP() {
         switch preference.DJAuthStep.name {
         case .phoneNumber:
@@ -100,20 +110,24 @@ final class OTPVerificationViewModel: BaseViewModel {
             postStepCompletedEvent()
         }
     }
-    
+
     private func logPhoneNumberValidationEvent() {
         postEvent(
-            request: .init(name: .phoneNumberValidation, value: "\(preference.DJOTPVerificationInfo),Successful"),
+            request: .init(
+                name: .phoneNumberValidation,
+                value: "\(preference.DJOTPVerificationInfo),Successful"
+            ),
             showLoader: true,
             showError: true,
             didSucceed: { [weak self] _ in
                 self?.postStepCompletedEvent()
-            }, didFail: { [weak self] _ in
+            },
+            didFail: { [weak self] _ in
                 self?.postStepCompletedEvent()
             }
         )
     }
-    
+
     private func postStepCompletedEvent() {
         guard let pageName = preference.DJAuthStep.name else { return }
         postEvent(
@@ -124,14 +138,15 @@ final class OTPVerificationViewModel: BaseViewModel {
                 runAfter { [weak self] in
                     self?.setNextAuthStep()
                 }
-            }, didFail: { [weak self] _ in
+            },
+            didFail: { [weak self] _ in
                 runAfter { [weak self] in
                     self?.setNextAuthStep()
                 }
             }
         )
     }
-    
+
     private func sendStepFailedEventForInvalidOTP() {
         postEvent(
             request: .stepFailed(errorCode: .invalidOTP),
@@ -139,27 +154,29 @@ final class OTPVerificationViewModel: BaseViewModel {
             showError: false
         )
     }
-    
+
     private func hideMessage() {
         runOnMainThread { [weak self] in
             self?.viewProtocol?.hideMessage()
         }
     }
-    
+
     private func showErrorMessage(_ message: String) {
         showLoader?(false)
         runOnMainThread { [weak self] in
             self?.viewProtocol?.showErrorMessage(message)
         }
     }
-    
+
     private func logEmailCollectedEvent() {
         let eventRequest = DJEventRequest(
             name: .emailCollected,
-            value: "\(preference.DJOTPVerificationInfo),Successful,\(preference.preAuthResponse?.widget?.duplicateCheck ?? false)"
+            value:
+                "\(preference.DJOTPVerificationInfo),Successful,\(preference.preAuthResponse?.widget?.duplicateCheck ?? false)"
         )
         showLoader?(true)
-        eventsRemoteDatasource.postEmailCollectedEvent(request: eventRequest) { [weak self] result in
+        eventsRemoteDatasource.postEmailCollectedEvent(request: eventRequest) {
+            [weak self] result in
             self?.showLoader?(false)
             switch result {
             case let .success(eventsResponse):
@@ -169,30 +186,35 @@ final class OTPVerificationViewModel: BaseViewModel {
             }
         }
     }
-    
-    private func didReceiveEmailCollectedResponse(_ response: EntityResponse<EmailCollectedEventResponse>) {
+
+    private func didReceiveEmailCollectedResponse(
+        _ response: EntityResponse<EmailCollectedEventResponse>
+    ) {
         postEvent(
             request: .event(name: .stepCompleted, pageName: .email),
             showLoader: false,
             showError: false
         )
-        
+
         guard let emailResponse = response.entity else {
             viewProtocol?.showErrorMessage(DJSDKError.tryAgain.uiMessage)
             return
         }
-        
+
         if emailResponse.duplicateReference ?? false {
             showMessage?(
                 .success(
                     titleText: "Verification successful",
-                    message: "Your identification has been successfully verified."
+                    message:
+                        "Your identification has been successfully verified."
                 )
             )
             return
         }
-        
-        if emailResponse.continueVerification ?? false, let config = emailResponse.data {
+
+        if emailResponse.continueVerification ?? false,
+            let config = emailResponse.data
+        {
             continueVerification(using: config)
         } else {
             runAfter { [weak self] in
@@ -200,24 +222,32 @@ final class OTPVerificationViewModel: BaseViewModel {
             }
         }
     }
-    
+
     private func continueVerification(using config: DJInitDataConfig) {
         if let verificationID = config.verificationID {
             preference.DJVerificationID = verificationID
         }
-        
+
         if let sessionID = config.sessionID, sessionID.isNotEmpty {
-            preference.DJRequestHeaders.updateValue(sessionID, forKey: "session")
+            preference.DJRequestHeaders.updateValue(
+                sessionID,
+                forKey: "session"
+            )
         }
-        
+
         if let referenceID = config.referenceID, referenceID.isNotEmpty {
-            preference.DJRequestHeaders.updateValue(referenceID, forKey: "reference")
+            preference.DJRequestHeaders.updateValue(
+                referenceID,
+                forKey: "reference"
+            )
         }
-        
-        if let steps = config.steps?.by(statuses: [.notdone, .pending]), steps.isNotEmpty {
+
+        if let steps = config.steps?.by(statuses: [.notdone, .pending]),
+            steps.isNotEmpty
+        {
             preference.DJSteps = steps
         }
-        
+
         runAfter { [weak self] in
             self?.setNextAuthStep()
         }

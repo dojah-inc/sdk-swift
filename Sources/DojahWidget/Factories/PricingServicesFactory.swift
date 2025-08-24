@@ -31,6 +31,7 @@ final class PricingServicesFactory {
             if canVerify {
                 return [pricingConfig.phoneNumber.verification.orEmpty]
             }
+            
         case .address:
             if canVerify {
                 return [pricingConfig.address.verification.orEmpty]
@@ -100,6 +101,8 @@ final class PricingServicesFactory {
             return [config.emailOtp.orEmpty]
         case .selfieVideo:
             return [config.video.orEmpty]
+        case .whatsappOtp:
+            return [config.whatsappOtp.orEmpty]
         }
     }
     
