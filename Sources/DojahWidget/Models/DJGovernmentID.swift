@@ -25,11 +25,14 @@ struct DJGovernmentID: Codable {
     
     var verificationModeParam: String? {
         guard let name else { return nil }
-        if name.insensitiveContains("otp") {
+        if name.insensitiveContains("sms") {
             return "OTP"
         } else if name.insensitiveContains("selfie") {
             return "LIVENESS"
-        } else {
+        } else if name.insensitiveContains("whatsapp") {
+            return "Whatsapp"
+        }
+        else {
             return nil
         }
     }
@@ -50,6 +53,9 @@ struct DJGovernmentID: Codable {
             return .selfie
         case "selfie-video":
             return .selfieVideo
+        
+        case "whatsappotp":
+            return .whatsappOtp
         default:
             return nil
         }

@@ -1,6 +1,6 @@
 //
 //  DJPage.swift
-//  
+//
 //
 //  Created by Isaac Iniongun on 02/12/2023.
 //
@@ -10,7 +10,7 @@ import Foundation
 struct DJPage: Codable {
     let pageName: DJPageName?
     let config: DJPageConfig?
-    
+
     enum CodingKeys: String, CodingKey {
         case pageName = "page"
         case config
@@ -19,7 +19,8 @@ struct DJPage: Codable {
 
 struct DJPageConfig: Codable {
     let bvn, dl, vnin, nin: Bool?
-    let otp, selfie, cac, tin, verification: Bool?
+    let otp, selfie, cac, tin, whatsappVerification, whatsappOtp,
+        verification: Bool?
     let passport, voter, national: Bool?
     let type: String?
     let version: Int?
@@ -34,10 +35,10 @@ struct DJPageConfig: Codable {
     let configDefault: String?
     let information: String?
     let freeProvider, disposable: Bool?
-    
+
     enum CodingKeys: String, CodingKey {
         case bvn, dl, vnin, nin
-        case otp, selfie, cac, tin, verification
+        case otp, selfie, cac, tin, verification, whatsappVerification, whatsappOtp
         case passport, voter, national
         case type, version, instruction
         case glassesCheck, brightnessThreshold
@@ -55,7 +56,7 @@ struct DJPageConfig: Codable {
         case information
         case freeProvider, disposable
     }
-    
+
     init(
         bvn: Bool? = nil,
         dl: Bool? = nil,
@@ -66,6 +67,8 @@ struct DJPageConfig: Codable {
         cac: Bool? = nil,
         tin: Bool? = nil,
         verification: Bool? = nil,
+        whatsappVerification: Bool? = nil,
+        whatsappOtp: Bool? = nil,
         passport: Bool? = nil,
         voter: Bool? = nil,
         national: Bool? = nil,
@@ -98,6 +101,8 @@ struct DJPageConfig: Codable {
         self.cac = cac
         self.tin = tin
         self.verification = verification
+        self.whatsappVerification = whatsappVerification
+        self.whatsappOtp = whatsappOtp
         self.passport = passport
         self.voter = voter
         self.national = national

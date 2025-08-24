@@ -12,7 +12,10 @@ final class DJPickerView: BaseView {
     private let titleLabel = UILabel(text: "", font: .regular(13))
     private let leftIconImageView = UIImageView()
     private let valueLabel = UILabel(text: "")
-    private let arrowdownImageView = UIImageView(image: .res("chevronDown"), size: 10)
+    private let arrowdownImageView = UIImageView(
+        image: .res("chevronDown"),
+        size: 10
+    )
     private lazy var valueStackView = HStackView(
         subviews: [leftIconImageView, valueLabel, arrowdownImageView],
         spacing: 10,
@@ -45,7 +48,7 @@ final class DJPickerView: BaseView {
             dropdownView.dataSource = selectionItems
         }
     }
-    
+
     private var itemSelectionHandler: StringIntParamHandler?
     private let showSelectedItem: Bool
 
@@ -116,7 +119,10 @@ final class DJPickerView: BaseView {
         with(dropdownView) {
             $0.anchorView = valueView
             $0.kwidth = valueView.width
-            $0.bottomOffset = CGPoint(x: 0, y:($0.anchorView?.plainView.bounds.height)!)
+            $0.bottomOffset = CGPoint(
+                x: 0,
+                y: ($0.anchorView?.plainView.bounds.height)!
+            )
             $0.show()
         }
     }
@@ -152,8 +158,8 @@ final class DJPickerView: BaseView {
             $0.textColor = value.isEmpty ? .aSecondaryLabel : .aLabel
         }
     }
-    
-    public func selectItem(item:String,index:Int) {
+
+    public func selectItem(item: String, index: Int) {
         updateValue(item)
         self.itemSelectionHandler?(item, index)
     }

@@ -16,6 +16,7 @@ struct DJGovernmentIDConfig: Codable {
     let ngDLI, ngPass, ngNat, ukRP: DJGovernmentID?
     let ngCustom, ngVcard, ngNINSlip: DJGovernmentID?
     let selfie, selfieVideo, otp: DJGovernmentID?
+    let whatsappOtp: DJGovernmentID?
     let ghDL, ghVoter, tzNIN, ugID: DJGovernmentID?
     let ugTelco, keDL, keID, keKRA: DJGovernmentID?
     let saDL, saID: DJGovernmentID?
@@ -32,6 +33,7 @@ struct DJGovernmentIDConfig: Codable {
         case ngVcard = "NG-VCARD"
         case ngNINSlip = "NG-NIN-SLIP"
         case selfie, otp
+        case whatsappOtp
         case selfieVideo = "selfie-video"
         case ghDL = "gh-dl"
         case ghVoter = "gh-voter"

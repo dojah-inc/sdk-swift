@@ -8,12 +8,15 @@
 import UIKit
 
 enum GovtIDVerificationMethod: String, CaseIterable, SelectableItem {
-    case govtID, selfie, phoneNumberOTP, emailOTP, selfieVideo
-    
+    case govtID, selfie, whatsappOtp, phoneNumberOTP, emailOTP, selfieVideo
+
     var title: String {
         switch self {
         case .selfie:
             return "Selfie"
+        case .whatsappOtp: 
+            return "WhatsApp"
+
         case .phoneNumberOTP:
             return "Phone Number OTP"
         case .emailOTP:
@@ -24,7 +27,7 @@ enum GovtIDVerificationMethod: String, CaseIterable, SelectableItem {
             return "Govt. ID"
         }
     }
-    
+
     var kycText: String {
         switch self {
         case .selfie:
@@ -33,9 +36,11 @@ enum GovtIDVerificationMethod: String, CaseIterable, SelectableItem {
             return ""
         case .selfieVideo:
             return "Record"
+        case .whatsappOtp:
+            return "WhatsApp"
         }
     }
-    
+
     var iconConfig: IconConfig { .init() }
 }
 

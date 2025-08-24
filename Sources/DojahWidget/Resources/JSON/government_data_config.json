@@ -125,8 +125,11 @@
     "selfie-video": {
       "name": "Selfie-Video"
     },
+    "whatsappOtp": {
+      "name": "Whatsapp"
+    },
     "otp": {
-      "name": "OTP"
+      "name": "SMS"
     },
     "gh-dl": {
       "name": "Driver's License",

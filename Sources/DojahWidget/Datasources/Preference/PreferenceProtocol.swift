@@ -23,6 +23,7 @@ protocol PreferenceProtocol {
     var DJCountryCode: String { get set }
     var DJSelectedGovernmentIDVerificationMethod: DJGovernmentID? { get set }
     var DJOTPVerificationInfo: String { get set }
+    var DJVerificationMethod: String { get set }
     var WidgetIDCache: [WidgetIDCache] { get set }
     var DJPricingServicesConfig: PricingServicesConfig? { get set }
     var VerificationResultStatus: String { get set }

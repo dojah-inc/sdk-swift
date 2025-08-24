@@ -8,7 +8,8 @@
 import Foundation
 
 struct PreferenceImpl: PreferenceProtocol {
-    
+    @UserDefaultPrimitive(key: .DJVerificationMethod, default: "")
+    var DJVerificationMethod: String
     
     @UserDefaultPrimitive(key: .DJWidgetID, default: "")
     var DJWidgetID: String
@@ -66,7 +67,5 @@ struct PreferenceImpl: PreferenceProtocol {
     
     @UserDefaultCodable(key: .ExtraUserData, default: nil)
     var DJExtraUserData: ExtraUserData?
-    
-    
     
 }

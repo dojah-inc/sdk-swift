@@ -12,7 +12,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/airbnb/HorizonCalendar.git", from: "1.0.0"),
-        .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.3.3"),
+        .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.5.2"),
         .package(url: "https://github.com/realm/realm-swift.git", from: "10.52.2"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.0"),
         .package(url: "https://github.com/googlemaps/ios-places-sdk", from: "8.3.0"),
@@ -33,24 +33,7 @@ let package = Package(
                 .product(name: "GooglePlaces", package: "ios-places-sdk")
             ],
             resources: [
-                .copy("Resources/JSON/countries.json"),
-                .copy("Resources/JSON/government_data_config.json"),
-                .copy("Resources/JSON/free_email_domains.json"),
-                .copy("Resources/JSON/disposable_email_domains.json"),
-                .copy("Resources/JSON/pricing_config.json"),
-                .copy("Resources/Animations/loading-circle.json"),
-                .copy("Resources/Animations/cancel.json"),
-                .copy("Resources/Animations/warning.json"),
-                .copy("Resources/Animations/error-2.json"),
-                .copy("Resources/Animations/failed.json"),
-                .copy("Resources/Animations/check-2.json"),
-                .copy("Resources/Animations/success.json"),
-                .copy("Resources/Animations/successfully-done.json"),
-                .copy("Resources/Animations/error.json"),
-                .copy("Resources/Animations/circle-loader.json"),
-                .copy("Resources/Animations/successfully-done-2.json"),
-                .copy("Resources/Animations/successfully-send.json"),
-                .copy("Resources/Animations/check_1.json")
+                .process("Resources")  // <- includes JSON,
             ]
         ),
         .testTarget(name: "DojahWidgetTests", dependencies: ["DojahWidget"]),

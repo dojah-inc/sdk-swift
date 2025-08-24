@@ -12,4 +12,5 @@ protocol PhoneNumberViewProtocol: BaseViewProtocol {
     func updateCountryDetails(phoneCode: String, flag: UIImage)
     func enableContinueButton(_ enable: Bool)
     func showVerifyController()
+    func updateVerificationMethod(method: String, index: Int)
 }
