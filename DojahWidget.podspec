@@ -9,6 +9,9 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '14.0'
   s.swift_version = '5.0'
+  s.pod_target_xcconfig = {
+  'IPHONEOS_DEPLOYMENT_TARGET' => '14.0'
+  }
   s.source_files = 'Sources/**/*.{swift,h}'
    s.resource_bundles = {
     'DojahWidgetResources' => [
