@@ -140,6 +140,12 @@ final class SelfieVideoKYCViewModel: BaseViewModel {
         
         if checkResponse.match ?? false {
             showLoader?(false)
+            postEvent(
+                request: .event(name: .stepCompleted, pageName: .governmentDataVerification, services: pricingServices),
+                showLoader: false,
+                showError: false
+            )
+            
             runAfter { [weak self] in
                 self?.setNextAuthStep()
             }

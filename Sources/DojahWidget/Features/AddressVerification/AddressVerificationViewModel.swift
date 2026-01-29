@@ -42,6 +42,7 @@ final class AddressVerificationViewModel: BaseViewModel {
         remoteDatasource.sendAddress(type: .userSelected, params: params) { [weak self] result in
             switch result {
             case let .success(response):
+                self?.postStepEvent(name: .stepCompleted)
                 self?.didSendUserSelectedAddress(response)
             case let .failure(error):
                 self?.showLoader?(false)
@@ -69,6 +70,7 @@ final class AddressVerificationViewModel: BaseViewModel {
         remoteDatasource.sendAddress(type: .userSelected, params: params) { [weak self] result in
             switch result {
             case let .success(response):
+                self?.postStepEvent(name: .stepCompleted)
                 self?.didSendUserSelectedAddress(response)
             case let .failure(error):
                 self?.showLoader?(false)
@@ -141,7 +143,7 @@ final class AddressVerificationViewModel: BaseViewModel {
             let params: DJParameters = [
                 "latitude": tmpCurrentLocation!.coordinate.latitude,
                 "longitude": tmpCurrentLocation!.coordinate.longitude,
-                "match": match,
+                "match": true,
                 "distance": distanceInMeters
             ]
             

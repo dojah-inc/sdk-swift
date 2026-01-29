@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'DojahWidget'
-  s.version      = '1.0.9'
+  s.version      = '1.1.1'
   s.summary      = 'DojahWidget SDK for Pod project.'
   s.homepage     = 'https://github.com/dojah-inc/sdk-swift.git'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
