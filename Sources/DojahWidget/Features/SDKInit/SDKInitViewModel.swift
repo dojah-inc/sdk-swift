@@ -59,6 +59,7 @@ final class SDKInitViewModel {
 
         preference.DJAuthStep = .index
         preference.platformSource = source
+        preference.DJCurrentPageID = 0
         
         if extraUserData != nil {
             preference.DJExtraUserData = extraUserData!

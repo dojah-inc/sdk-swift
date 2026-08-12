@@ -8,6 +8,9 @@
 import Foundation
 
 struct PreferenceImpl: PreferenceProtocol {
+    @UserDefaultPrimitive(key: .DJCurrentPageID, default: -1)
+    var DJCurrentPageID: Int
+    
     @UserDefaultCodable(key: .DJCountryStates, default: nil)
     var DJCountryStates: [HomeCountry]?
     

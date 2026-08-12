@@ -128,7 +128,9 @@ public class DJBaseViewController: UIViewController {
 
     func showNextPage() {
         guard let kviewModel else { return }
+        kviewModel.preference.DJCurrentPageID += 1
         let pageName = kviewModel.preference.DJAuthStep.name
+        
         switch pageName {
         case .countries:
             if kviewModel.preference.DJCanSeeCountryPage {

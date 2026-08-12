@@ -9,9 +9,13 @@ import Foundation
 
 struct GovernmentIDFactory {
     static func getGovernmentIDs(for pageName: DJPageName, preference: PreferenceProtocol) -> [DJGovernmentID] {
-        guard let govtDataConfig = preference.DJGovernmentIDConfig,
-              let authStep = preference.DJSteps.first(where: { $0.name == pageName })
-        else { return [] }
+        let currentPage = preference.DJCurrentPageID
+        guard let govtDataConfig = preference.DJGovernmentIDConfig else { return [] }
+
+        let authStep = preference.DJSteps[currentPage]
+
+        // Ensure the step matches the requested page name
+        guard authStep.name == pageName else { return [] }
         
         var governmentIDs = [DJGovernmentID]()
         

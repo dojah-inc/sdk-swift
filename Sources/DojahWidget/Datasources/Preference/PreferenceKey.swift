@@ -31,4 +31,5 @@ enum PreferenceKey: String {
     case VerificationResultStatus
     case ExtraUserData
     case DJCountryStates
+    case DJCurrentPageID
 }

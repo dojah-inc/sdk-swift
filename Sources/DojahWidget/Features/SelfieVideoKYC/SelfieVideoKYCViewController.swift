@@ -10,11 +10,6 @@ import AVFoundation
 import ImageIO
 import Vision
 
-#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
-import MLKitFaceDetection
-import MLKitVision
-#endif
-
 final class SelfieVideoKYCViewController: DJBaseViewController {
 
     private let viewModel: SelfieVideoKYCViewModel
@@ -29,18 +24,6 @@ final class SelfieVideoKYCViewController: DJBaseViewController {
     private var currentFaceGuidance: FaceCaptureGuidance?
     private var didAutoCaptureSelfie = false
     private var isFaceDetectionActive = false
-
-#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
-    private lazy var faceDetector: FaceDetector = {
-        let options = FaceDetectorOptions()
-        options.performanceMode = .fast
-        options.landmarkMode = .none
-        options.contourMode = .none
-        options.classificationMode = .none
-        options.minFaceSize = 0.15
-        return FaceDetector.faceDetector(options: options)
-    }()
-#endif
 
     init(viewModel: SelfieVideoKYCViewModel = SelfieVideoKYCViewModel()) {
         self.viewModel = viewModel
@@ -541,32 +524,8 @@ extension SelfieVideoKYCViewController: AVCaptureVideoDataOutputSampleBufferDele
         from connection: AVCaptureConnection
     ) {
         guard viewState == .capture, isFaceDetectionActive, !didAutoCaptureSelfie else { return }
-
-#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
-        let orientation = imageOrientation(
-            deviceOrientation: UIDevice.current.orientation,
-            cameraPosition: .front
-        )
-        let image = VisionImage(buffer: sampleBuffer)
-        image.orientation = orientation
-
-        do {
-            let faces = try faceDetector.results(in: image)
-            let guidance = faceCaptureGuidance(
-                for: faces,
-                sampleBuffer: sampleBuffer,
-                orientation: orientation
-            )
-            runOnMainThread { [weak self] in
-                self?.applyFaceCaptureGuidance(guidance)
-            }
-        } catch {
-            kprint("Error detecting face: \(error.localizedDescription)")
-            processFaceFrameWithVision(sampleBuffer)
-        }
-#else
+        // Apple Vision avoids ML Kit Clearcut/SRL failures in Flutter/RN host apps.
         processFaceFrameWithVision(sampleBuffer)
-#endif
     }
 
     private func processFaceFrameWithVision(_ sampleBuffer: CMSampleBuffer) {
@@ -592,7 +551,7 @@ extension SelfieVideoKYCViewController: AVCaptureVideoDataOutputSampleBufferDele
                 self?.applyFaceCaptureGuidance(guidance)
             }
         } catch {
-            kprint("Error detecting face with Vision fallback: \(error.localizedDescription)")
+            kprint("Error detecting face with Vision: \(error.localizedDescription)")
         }
     }
 
@@ -670,97 +629,6 @@ extension SelfieVideoKYCViewController: AVCaptureVideoDataOutputSampleBufferDele
             return cameraPosition == .front ? .leftMirrored : .right
         }
     }
-
-#if canImport(MLKitFaceDetection) && canImport(MLKitVision)
-    private func faceCaptureGuidance(
-        for faces: [Face],
-        sampleBuffer: CMSampleBuffer,
-        orientation: UIImage.Orientation
-    ) -> FaceCaptureGuidance {
-        if let brightnessValue = brightnessValue(from: sampleBuffer) {
-            if brightnessValue < -1.2 {
-                return .poorLighting
-            }
-            if brightnessValue > 3.8 {
-                return .highLighting
-            }
-        }
-
-        guard !faces.isEmpty else {
-            return .centerFace
-        }
-        guard faces.count == 1, let face = faces.first else {
-            return .multipleFaces
-        }
-
-        let imageSize = imageSize(from: sampleBuffer, orientation: orientation)
-        guard imageSize.width > 0, imageSize.height > 0 else {
-            return .centerFace
-        }
-
-        let widthRatio = face.frame.width / imageSize.width
-        let heightRatio = face.frame.height / imageSize.height
-        let largestFaceSideRatio = max(widthRatio, heightRatio)
-        let smallestFaceSideRatio = min(widthRatio, heightRatio)
-
-        if largestFaceSideRatio > FaceCaptureThreshold.maximumFaceSizeRatio {
-            return .moveBack
-        }
-        if smallestFaceSideRatio < FaceCaptureThreshold.minimumFaceSizeRatio {
-            return .moveCloser
-        }
-
-        let normalizedCenterX = face.frame.midX / imageSize.width
-        let normalizedCenterY = face.frame.midY / imageSize.height
-        let centerOffsetX = abs(normalizedCenterX - 0.5)
-        let centerOffsetY = abs(normalizedCenterY - 0.5)
-        if centerOffsetX > FaceCaptureThreshold.maximumCenterOffsetX ||
-            centerOffsetY > FaceCaptureThreshold.maximumCenterOffsetY {
-            return .centerFace
-        }
-
-        return .ready
-    }
-
-    private func imageSize(
-        from sampleBuffer: CMSampleBuffer,
-        orientation: UIImage.Orientation
-    ) -> CGSize {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-            return .zero
-        }
-
-        let width = CGFloat(CVPixelBufferGetWidth(imageBuffer))
-        let height = CGFloat(CVPixelBufferGetHeight(imageBuffer))
-
-        switch orientation {
-        case .left, .leftMirrored, .right, .rightMirrored:
-            return .init(width: height, height: width)
-        default:
-            return .init(width: width, height: height)
-        }
-    }
-
-    private func imageOrientation(
-        deviceOrientation: UIDeviceOrientation,
-        cameraPosition: AVCaptureDevice.Position
-    ) -> UIImage.Orientation {
-        switch deviceOrientation {
-        case .portrait:
-            return cameraPosition == .front ? .leftMirrored : .right
-        case .landscapeLeft:
-            return cameraPosition == .front ? .downMirrored : .up
-        case .portraitUpsideDown:
-            return cameraPosition == .front ? .rightMirrored : .left
-        case .landscapeRight:
-            return cameraPosition == .front ? .upMirrored : .down
-        case .faceDown, .faceUp, .unknown:
-            return cameraPosition == .front ? .leftMirrored : .right
-        @unknown default:
-            return cameraPosition == .front ? .leftMirrored : .right
-        }
-    }
-#endif
 }
 
 extension SelfieVideoKYCViewController: AVCapturePhotoCaptureDelegate {
