@@ -28,10 +28,17 @@ final class DJGovernmentDataViewModel: BaseViewModel {
 
     init(
         remoteDatasource: GovernmentDataRemoteDatasourceProtocol =
-            GovernmentDataRemoteDatasource()
+            GovernmentDataRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.governmentDataRemoteDatasource = remoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         governmentIDs = GovernmentIDFactory.getGovernmentIDs(
             for: .governmentData,
             preference: preference

@@ -38,8 +38,16 @@ final class CustomQuestionsViewModel: BaseViewModel {
     private var localQuestions: [CustomQuestionsConfig.Question] = []
     private var localTitle: String = ""
 
-    init() {
-        super.init()
+    override init(
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         loadFromPreference()
     }
 

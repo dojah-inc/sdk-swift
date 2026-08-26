@@ -25,9 +25,18 @@ final class AddressVerificationViewModel: BaseViewModel {
     private lazy var placesClient = GMSPlacesClient.shared()
     var placePredictions = [GMSAutocompletePrediction]()
     
-    init(remoteDatasource: AddressVerificationRemoteDatasourceProtocol = AddressVerificationRemoteDatasource()) {
+    init(
+        remoteDatasource: AddressVerificationRemoteDatasourceProtocol = AddressVerificationRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
         self.remoteDatasource = remoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         let countryStates = super.preference.DJCountryStates ?? []
         let countryIsoCode = super.preference.DJIPCountry ?? ""
         

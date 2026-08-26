@@ -8,8 +8,8 @@
 import Foundation
 
 class BaseViewModel {
-    let eventsRemoteDatasource: EventsRemoteDatasourceProtocol
-    let decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol
+    var eventsRemoteDatasource: EventsRemoteDatasourceProtocol
+    var decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol
     var preference: PreferenceProtocol
     var showLoader: ParamHandler<Bool>?
     var showMessage: ParamHandler<FeedbackConfig>?

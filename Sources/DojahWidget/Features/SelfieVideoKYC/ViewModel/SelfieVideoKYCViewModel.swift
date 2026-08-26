@@ -30,12 +30,19 @@ final class SelfieVideoKYCViewModel: BaseViewModel {
     init(
         remoteDatasource: LivenessRemoteDatasourceProtocol = LivenessRemoteDatasource(),
         verificationMethod: GovtIDVerificationMethod = .selfie,
-        viewState: SelfieVideoKYCViewState = .capture
+        viewState: SelfieVideoKYCViewState = .capture,
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.remoteDatasource = remoteDatasource
         self.verificationMethod = verificationMethod
         self.viewState = viewState
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
     }
     
     private func imageAnalysisOrCheckDidFail(error: DJSDKError) {

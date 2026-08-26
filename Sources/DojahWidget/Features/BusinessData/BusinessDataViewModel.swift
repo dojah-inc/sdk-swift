@@ -15,9 +15,18 @@ final class BusinessDataViewModel: BaseViewModel {
     var selectedDocument: DJGovernmentID?
     var selectedCompanyType: CompanyType?
     
-    init(remoteDatasource: BusinessDataRemoteDatasourceProtocol = BusinessDataRemoteDatasource()) {
+    init(
+        remoteDatasource: BusinessDataRemoteDatasourceProtocol = BusinessDataRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
         self.remoteDatasource = remoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         documentTypes = GovernmentIDFactory.getBusinessDocumentTypes(preference: preference)
         companyTypes = CompanyType.allCases
     }

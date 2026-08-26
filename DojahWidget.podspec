@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'DojahWidget'
-  s.version      = '1.1.16'
+  s.version      = '1.1.17'
   s.summary      = 'DojahWidget SDK for Pod project.'
   s.homepage     = 'https://github.com/dojah-inc/sdk-swift.git'
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
@@ -55,7 +55,6 @@ Pod::Spec.new do |s|
   s.dependency 'Kingfisher', '~> 7.12.0'
   s.dependency 'GooglePlaces', '~> 8.5.0'
   # Face guidance uses Apple Vision; GoogleMLKit conflicts in Flutter/RN hosts.
-  s.dependency 'Clarity'
   # s.dependency 'lottie-ios'
 
   # Alternatively, for pre-built frameworks:

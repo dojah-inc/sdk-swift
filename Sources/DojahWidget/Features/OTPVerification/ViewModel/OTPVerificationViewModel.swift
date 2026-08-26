@@ -32,10 +32,17 @@ final class OTPVerificationViewModel: BaseViewModel {
     }
 
     init(
-        otpRemoteDatasource: OTPRemoteDatasourceProtocol = OTPRemoteDatasource()
+        otpRemoteDatasource: OTPRemoteDatasourceProtocol = OTPRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.otpRemoteDatasource = otpRemoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
     }
 
     func requestOTP() {

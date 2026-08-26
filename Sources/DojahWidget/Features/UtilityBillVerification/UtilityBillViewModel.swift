@@ -24,10 +24,17 @@ final class UtilityBillViewModel: BaseViewModel {
     }
     
     init(
-        livenessRemoteDatasource: LivenessRemoteDatasourceProtocol = LivenessRemoteDatasource()
+        livenessRemoteDatasource: LivenessRemoteDatasourceProtocol = LivenessRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.livenessRemoteDatasource = livenessRemoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
     }
     
     func didTapContinue() {

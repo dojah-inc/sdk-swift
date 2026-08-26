@@ -14,9 +14,18 @@ final class EmailViewModel: BaseViewModel {
     private var disposalEmailDomains = [String]()
     private var freeEmailDomains = [String]()
     
-    init(validator: IInputValidator = InputValidatorImpl()) {
+    init(
+        validator: IInputValidator = InputValidatorImpl(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
         self.validator = validator
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         initialiseFreeAndDisposableEmailDomains()
     }
     

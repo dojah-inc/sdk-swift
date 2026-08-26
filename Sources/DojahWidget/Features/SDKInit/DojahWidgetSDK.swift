@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Clarity
 
 public final class DojahWidgetSDK {
     
@@ -20,11 +19,6 @@ public final class DojahWidgetSDK {
         navController: UINavigationController) {
             
         let sourceConfig = source ?? "ios_native"
-            
-        // initialise clarity
-        let clarityConfig = ClarityConfig(projectId: "tphsgbjtpp")
-        ClaritySDK.initialize(config: clarityConfig)
-        ClaritySDK.setCustomTag(key: "source", value: sourceConfig)
             
         let viewModel = SDKInitViewModel(
             widgetID: widgetID,

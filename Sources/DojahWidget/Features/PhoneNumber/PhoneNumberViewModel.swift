@@ -18,13 +18,20 @@ final class PhoneNumberViewModel: BaseViewModel {
 
     init(
         countriesLocalDatasource: CountriesLocalDatasourceProtocol =
-            CountriesLocalDatasource()
+            CountriesLocalDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.countriesLocalDatasource = countriesLocalDatasource
         countries = countriesLocalDatasource.getCountries().sorted {
             $0.phoneCode < $1.phoneCode
         }
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
     }
 
     var verificationMethods: [String] {

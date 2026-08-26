@@ -13,6 +13,18 @@ final class DJDisclaimerViewModel: BaseViewModel {
         preference.DJCanSeeCountryPage
     }
     
+    override init(
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
+    }
+    
     func checkSupportedCountry() {
         let countries = preference.preAuthResponse?.widget?.countries ?? [preference.DJIPCountry]
         

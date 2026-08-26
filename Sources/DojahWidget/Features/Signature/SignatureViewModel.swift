@@ -10,6 +10,18 @@ import Foundation
 final class SignatureViewModel: BaseViewModel {
     lazy var signatureTitle = preference.DJAuthStep.config?.titleText ?? "Sign and confirm information"
     lazy var signatureInformation = preference.DJAuthStep.config?.information ?? ""
+    
+    override init(
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
+    }
 
     func didTapPrimaryButton(name: String, signatureData: Data) {
         confirm(name: name, signatureData: signatureData)

@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "clarity-apps",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/microsoft/clarity-apps",
-      "state" : {
-        "branch" : "main",
-        "revision" : "7377248f3cf4315b34a5d1491605d86d567373d9"
-      }
-    },
-    {
       "identity" : "horizoncalendar",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/HorizonCalendar.git",

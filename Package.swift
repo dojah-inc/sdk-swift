@@ -16,7 +16,6 @@ let package = Package(
         .package(url: "https://github.com/realm/realm-swift.git", from: "10.52.2"),
         .package(url: "https://github.com/hackiftekhar/IQKeyboardManager.git", from: "6.5.0"),
         .package(url: "https://github.com/googlemaps/ios-places-sdk", from: "8.3.0"),
-        .package(url: "https://github.com/microsoft/clarity-apps", branch: "main"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0")
     ],
     targets: [
@@ -29,7 +28,6 @@ let package = Package(
                 .product(name: "Lottie", package: "lottie-ios"),
                 //.product(name: "Realm", package: "realm-swift"),
                 .product(name: "RealmSwift", package: "realm-swift"),
-                .product(name: "Clarity", package: "clarity-apps"),
                 .product(name: "IQKeyboardManagerSwift", package: "IQKeyboardManager"),
                 .product(name: "Kingfisher", package: "Kingfisher"),
                 .product(name: "GooglePlaces", package: "ios-places-sdk")

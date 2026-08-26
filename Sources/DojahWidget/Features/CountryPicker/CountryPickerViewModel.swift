@@ -16,12 +16,21 @@ final class CountryPickerViewModel: BaseViewModel {
     private var selectedCountry: DJCountryDB?
     private lazy var preAuthCountries = preference.preAuthResponse?.widget?.countries
     
-    init(countriesLocalDatasource: CountriesLocalDatasourceProtocol = CountriesLocalDatasource()) {
+    init(
+        countriesLocalDatasource: CountriesLocalDatasourceProtocol = CountriesLocalDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
         self.countriesLocalDatasource = countriesLocalDatasource
         // Initialize simple stored properties before using self
         self.allCountries = []
         self.countries = []
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
 
         // Compute iso codes without capturing self in a closure
         let isoCodes: [String] = {
@@ -57,7 +66,7 @@ final class CountryPickerViewModel: BaseViewModel {
         }
         self.countries = self.allCountries
 
-        preference.DJCountryCode = "NG"
+        self.preference.DJCountryCode = "NG"
     }
 
     func filterCountries(_ text: String) {

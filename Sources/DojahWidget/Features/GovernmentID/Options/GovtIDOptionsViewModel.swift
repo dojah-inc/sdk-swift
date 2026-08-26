@@ -11,8 +11,16 @@ final class GovtIDOptionsViewModel: BaseViewModel {
     var identificationTypes = [DJGovernmentID]()
     var selectedID: DJGovernmentID?
     
-    init() {
-        super.init()
+    override init(
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         identificationTypes = GovernmentIDFactory.getGovernmentIDs(for: .id, preference: preference)
     }
     

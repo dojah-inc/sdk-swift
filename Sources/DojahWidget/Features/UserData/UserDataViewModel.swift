@@ -11,9 +11,18 @@ final class UserDataViewModel: BaseViewModel {
     weak var viewProtocol: UserDataViewProtocol?
     private let remoteDatasource: UserDataRemoteDatasourceProtocol
     
-    init(remoteDatasource: UserDataRemoteDatasourceProtocol = UserDataRemoteDatasource()) {
+    init(
+        remoteDatasource: UserDataRemoteDatasourceProtocol = UserDataRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
+    ) {
         self.remoteDatasource = remoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
     }
     
     func saveUserData(

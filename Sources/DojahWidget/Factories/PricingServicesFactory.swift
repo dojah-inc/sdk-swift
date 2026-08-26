@@ -11,7 +11,7 @@ final class PricingServicesFactory {
     static let shared = PricingServicesFactory()
     private let preference: PreferenceProtocol
     
-    private init(preference: PreferenceProtocol = PreferenceImpl()) {
+    init(preference: PreferenceProtocol = PreferenceImpl()) {
         self.preference = preference
     }
     

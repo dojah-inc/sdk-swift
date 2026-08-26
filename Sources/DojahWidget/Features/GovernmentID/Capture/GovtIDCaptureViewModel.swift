@@ -45,11 +45,18 @@ final class GovtIDCaptureViewModel: BaseViewModel {
     
     init(
         selectedID: DJGovernmentID = .empty,
-        livenessRemoteDatasource: LivenessRemoteDatasourceProtocol = LivenessRemoteDatasource()
+        livenessRemoteDatasource: LivenessRemoteDatasourceProtocol = LivenessRemoteDatasource(),
+        eventsRemoteDatasource: EventsRemoteDatasourceProtocol = EventsRemoteDatasource(),
+        decisionRemoteDatasource: DecisionEngineRemoteDatasourceProtocol = DecisionEngineRemoteDatasource(),
+        preference: PreferenceProtocol = PreferenceImpl()
     ) {
         self.selectedID = selectedID
         self.livenessRemoteDatasource = livenessRemoteDatasource
-        super.init()
+        super.init(
+            eventsRemoteDatasource: eventsRemoteDatasource,
+            decisionRemoteDatasource: decisionRemoteDatasource,
+            preference: preference
+        )
         initViewState()
     }
     
